@@ -1,4 +1,5 @@
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:elearning/pages/home/home.dart';
 import 'package:elearning/pages/welcome/bloc/welcome.events.dart';
 import 'package:elearning/pages/welcome/bloc/welcome_blocs.dart';
 import 'package:elearning/pages/welcome/bloc/welcome_states.dart';
@@ -14,6 +15,7 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
+  PageController pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,6 +31,7 @@ class _WelcomeState extends State<Welcome> {
               alignment: Alignment.topCenter,
               children: [
                 PageView(
+                  controller: pageController,
                   onPageChanged: (index) {
                     state.page = index;
                     BlocProvider.of<WelcomeBloc>(context).add(WelcomeEvent());
@@ -49,7 +52,7 @@ class _WelcomeState extends State<Welcome> {
                       "next",
                       "Always Fascinated Learning",
                       "Anywhere, anytime. The time is at your discretion so study whenever you want. ",
-                      "ssets/images/boy.png",
+                      "assets/images/boy.png",
                     ),
                     _page(
                       3,
@@ -57,7 +60,7 @@ class _WelcomeState extends State<Welcome> {
                       "get started",
                       "Connect with EveryOne",
                       "Forget about a for of paper all knowledge in on learning",
-                      "ssets/images/man.png",
+                      "assets/images/man.png",
                     ),
                   ],
                 ),
@@ -101,7 +104,7 @@ class _WelcomeState extends State<Welcome> {
           title,
           style: TextStyle(
             color: Colors.black,
-            fontSize: 24.sp,
+            fontSize: 20.sp,
             fontWeight: FontWeight.normal,
           ),
         )),
@@ -111,33 +114,50 @@ class _WelcomeState extends State<Welcome> {
               subTitle,
               style: TextStyle(
                 color: Colors.black.withOpacity(0.5),
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 fontWeight: FontWeight.normal,
               ),
             )),
-        Container(
-          margin: EdgeInsets.only(top: 100.h, left: 25.w, right: 25.w),
-          width: 325.w,
-          height: 50.h,
-          decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.all(Radius.circular(15.w)),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(0, 5))
-              ]),
-          child: Center(
-              child: Text(
-            buttonName,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
+        GestureDetector(
+          onTap: () {
+            //with 0-2 index
+            if (index < 3) {
+              //animation
+              pageController.animateToPage(index,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeIn);
+            } else {
+              //jump to a new page
+              // Navigator.of(context).push(
+              //     MaterialPageRoute(builder: (context) => const HomePage()));
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("signIN", (route) => false);
+            }
+          },
+          child: Container(
+            margin: EdgeInsets.only(top: 100.h, left: 25.w, right: 25.w),
+            width: 325.w,
+            height: 50.h,
+            decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.all(Radius.circular(15.w)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: const Offset(0, 5))
+                ]),
+            child: Center(
+                child: Text(
+              buttonName,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            )),
+          ),
         ),
       ],
     );
